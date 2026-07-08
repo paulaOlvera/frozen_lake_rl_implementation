@@ -7,15 +7,23 @@ class GridWorld:
         self.create_frozen_tiles(True)
         
     def create_frozen_tiles(self,random):
+        
         if random:
-            count = 0
-            while count<4:
-                row = np.random.randint(0,4)
-                col = np.random.randint(0,4)
-                if (self.grid[row][col]!='P' or 'G') and self.grid[row][col]==' ':
-                    count+=1
-                    print(f"row {row} and col {col}")
-                    self.grid[row][col]='H'
+            while True:
+                count = 0
+                while count<4:
+                    row = np.random.randint(0,4)
+                    col = np.random.randint(0,4)
+                    if self.grid[row][col]==' ':
+                        count+=1
+                        print(f"row {row} and col {col}")
+                        self.grid[row][col]='H'
+                self.display_board()
+                if self.possible_tiles_hole():
+                    break
+                else:
+                    self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
+        
 
         else: 
             self.grid[1][1]='H'
@@ -24,17 +32,31 @@ class GridWorld:
             self.grid[3][0]='H'
 
     def possible_tiles_hole(self):
-        # Function to see if the tiles with a hole i created are possible.
-        for i in self.grid:
-            # check rows
-            if self.grid[i][0]!=' ' and self.grid[i][0] == self.grid[i][1] == self.grid[i][2] == self.grid[i][3]:
-                return False
-            # check columns
-            if self.grid[0][i]!=' ' and self.grid[1][i] == self.grid[2][i] == self.grid[3][i]:
-                return False
-            # check diagonals
-        
-        return True
+        # Function to see if i can reach the goal from the start point. 
+        to_visit_cells = []
+        visited_cells = []
+
+        start_position = (0,0)
+        directions = [(-1,0),(1,0),(0,-1),(0,1)]
+
+        to_visit_cells.append(start_position)
+        visited_cells.append(to_visit_cells[0])
+        while to_visit_cells:
+            current_cell = to_visit_cells.pop(0)
+            for possible_direction in directions:
+                
+                new_cell = (current_cell[0]+possible_direction[0],current_cell[1]+possible_direction[1])
+                if 0<=new_cell[0]<4 and 0<=new_cell[1]<4 and self.grid[new_cell[0]][new_cell[1]]!='H':
+                    count = 0
+                    if new_cell not in visited_cells:
+                        to_visit_cells.append(new_cell)
+                        
+                    if self.grid[new_cell[0]][new_cell[1]]=='G':
+                        to_visit_cells.pop(0)
+                        return True
+                
+            visited_cells.append(current_cell)
+        return False
             
     def display_board(self):
         for row in self.grid:
@@ -52,4 +74,4 @@ class GridWorld:
 
 if __name__ == "__main__":
     environment = GridWorld()
-    environment.display_board()
+    # environment.display_board()
