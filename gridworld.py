@@ -18,7 +18,7 @@ class GridWorld:
                         count+=1
                         print(f"row {row} and col {col}")
                         self.grid[row][col]='H'
-                self.display_board()
+                self.render()
                 if self.possible_tiles_hole():
                     break
                 else:
@@ -58,7 +58,7 @@ class GridWorld:
             visited_cells.append(current_cell)
         return False
             
-    def display_board(self):
+    def render(self):
         for row in self.grid:
             print(row)
 
@@ -68,8 +68,31 @@ class GridWorld:
         else: 
             pass
 
-    def set_move(self,row,col):
-        pass
+    def reset(self):
+        self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
+        self.create_frozen_tiles(True)
+
+    def step(self,action):
+        moves = [
+            (-1,0) # move up
+            (1,0)  # move down
+            (0,-1) # move left
+            (0,1)  # move right
+        ]
+        move = moves[action]
+        current_step = self.get_state()
+        
+
+        # return next_step, reward, done
+
+    def get_state(self):
+        for row in len(self.grid):
+            for col in len(self.grid[0]):
+                if self.grid[row][col]=='P':
+                    state = (row,col)
+                    return state
+
+        
 
 
 if __name__ == "__main__":
