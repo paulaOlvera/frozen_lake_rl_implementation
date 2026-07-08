@@ -4,6 +4,7 @@ class GridWorld:
     def __init__(self):
         self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
         # self.is_slippery = False
+        self.goal_position = (3,3)
         self.create_frozen_tiles(True)
         
     def create_frozen_tiles(self,random):
@@ -52,7 +53,6 @@ class GridWorld:
                         to_visit_cells.append(new_cell)
                         
                     if self.grid[new_cell[0]][new_cell[1]]=='G':
-                        to_visit_cells.pop(0)
                         return True
                 
             visited_cells.append(current_cell)
@@ -68,33 +68,64 @@ class GridWorld:
         else: 
             pass
 
-    def reset(self):
+    def reset(self,random):
         self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
-        self.create_frozen_tiles(True)
+        self.create_frozen_tiles(random)
 
     def step(self,action):
         moves = [
-            (-1,0) # move up
-            (1,0)  # move down
-            (0,-1) # move left
+            (-1,0), # move up
+            (1,0),  # move down
+            (0,-1), # move left
             (0,1)  # move right
         ]
         move = moves[action]
         current_step = self.get_state()
+        next_possible_step = (current_step[0]+move[0],current_step[1]+move[1])
+        # check if this next_possible_step is not outside the gridworld.
+        if 0<=next_possible_step[0]<4 and 0<=next_possible_step[1]<4:
+            next_step = next_possible_step
+            if next_step == self.goal_position: # goal position
+                self.grid[current_step[0]][current_step[1]]=' '
+                self.grid[next_step[0]][next_step[1]]='P'
+                reward=1
+                done=True
+            elif self.grid[next_step[0]][next_step[1]]=='H':
+                reward = -1 # the next step has fall in a hole tile. 
+                done =True
+            else:
+                self.grid[current_step[0]][current_step[1]]=' '
+                self.grid[next_step[0]][next_step[1]]='P'
+                reward = 0
+                done = False
+
+        else:
+            next_step =current_step
+            reward = -0.1
+            done = False
         
 
-        # return next_step, reward, done
+        return next_step, reward, done
 
     def get_state(self):
-        for row in len(self.grid):
-            for col in len(self.grid[0]):
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[0])):
                 if self.grid[row][col]=='P':
                     state = (row,col)
                     return state
 
         
-
-
 if __name__ == "__main__":
-    environment = GridWorld()
-    # environment.display_board()
+    env = GridWorld()
+    while True:
+        # do two actions to see if get action works
+        action = np.random.randint(0,4)
+        print(f"Action: {action}")
+        next_step,reward,done = env.step(action)
+        env.render()
+        print()
+        if done:
+            break
+         
+
+
