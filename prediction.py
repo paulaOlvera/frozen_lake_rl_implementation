@@ -1,8 +1,8 @@
-from agent import Agent
+from agents import Q_learningAgent
 from gridworld import GridWorld
 import numpy as np
 
-agent = Agent()
+agent = Q_learningAgent()
 env = GridWorld(False)
 agent.q_table = np.load("frozen_lake_rl_implementation/q_table.npy")
 if __name__ == '__main__': 

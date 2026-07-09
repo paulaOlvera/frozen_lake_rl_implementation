@@ -1,5 +1,5 @@
 import numpy as np
-from agent import Agent
+
 class GridWorld:
     def __init__(self,random):
         self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]

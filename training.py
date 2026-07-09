@@ -1,9 +1,9 @@
 import numpy as np
-from agent import Agent
+from agents import Q_learningAgent
 from gridworld import GridWorld
 
 env = GridWorld(True)
-agent = Agent()
+agent = Q_learningAgent()
 max_episodes = 100000
 episode = 0
 if __name__ == '__main__': 

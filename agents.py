@@ -1,6 +1,9 @@
 import numpy as np 
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
-class Agent:
+class Q_learningAgent:
     def __init__(self):
 
         self.q_table = np.zeros((4,4,4))
@@ -25,3 +28,33 @@ class Agent:
         # q-learning equation
         self.q_table[state[0],state[1],action]=current_q+self.alpha*(reward+self.gamma*best_next_q-current_q)
         # return self.q_table
+
+class Deep_Q_learningAgent(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.gamma = 0.99
+        self.epsilon = 1
+        self.learning_rate = 0.001
+
+        self.network == nn.Sequential(
+            nn.Linear(66, 64),   # Input: state + map
+            nn.ReLU(),
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            nn.Linear(64, 4)     # Output: the four possible actions: up, down, left, right
+
+        )
+        self.optimizer = optim.Adam(self.model.parameters(),lr=self.learning_rate)
+        self.criterion == nn.MSELoss()
+        
+    def forward(self,x):
+        return self.network(x)
+    
+    def choose_action(self,state):
+        pass
+
+    def train_step(self, state, action, reward, next_state, done):
+        pass
+
+    def encoding_grid(self):
+        pass
