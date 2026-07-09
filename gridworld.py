@@ -1,5 +1,5 @@
 import numpy as np
-
+from agent import Agent
 class GridWorld:
     def __init__(self):
         self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
@@ -104,7 +104,6 @@ class GridWorld:
             reward = -0.1
             done = False
         
-
         return next_step, reward, done
 
     def get_state(self):
@@ -115,17 +114,9 @@ class GridWorld:
                     return state
 
         
-if __name__ == "__main__":
-    env = GridWorld()
-    while True:
-        # do two actions to see if get action works
-        action = np.random.randint(0,4)
-        print(f"Action: {action}")
-        next_step,reward,done = env.step(action)
-        env.render()
-        print()
-        if done:
-            break
+
+
+        
          
 
 
