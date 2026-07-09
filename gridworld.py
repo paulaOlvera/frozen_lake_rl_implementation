@@ -1,11 +1,12 @@
 import numpy as np
 from agent import Agent
 class GridWorld:
-    def __init__(self):
+    def __init__(self,random):
         self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
         # self.is_slippery = False
         self.goal_position = (3,3)
-        self.create_frozen_tiles(True)
+        self.random = random
+        self.create_frozen_tiles(self.random)
         
     def create_frozen_tiles(self,random):
         
@@ -68,9 +69,9 @@ class GridWorld:
         else: 
             pass
 
-    def reset(self,random):
+    def reset(self):
         self.grid = [['P',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ',' '],[' ',' ',' ','G']]
-        self.create_frozen_tiles(random)
+        self.create_frozen_tiles(self.random)
 
     def step(self,action):
         moves = [

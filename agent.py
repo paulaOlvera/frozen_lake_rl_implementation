@@ -1,6 +1,5 @@
 import numpy as np 
 
-
 class Agent:
     def __init__(self):
 
@@ -25,3 +24,4 @@ class Agent:
         best_next_q = np.max(self.q_table[next_state[0],next_state[1]])
         # q-learning equation
         self.q_table[state[0],state[1],action]=current_q+self.alpha*(reward+self.gamma*best_next_q-current_q)
+        # return self.q_table
