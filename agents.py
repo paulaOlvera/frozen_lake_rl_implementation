@@ -37,7 +37,7 @@ class Deep_Q_learningAgent(nn.Module):
         self.learning_rate = 0.001
 
         self.network = nn.Sequential(
-            nn.Linear(66, 64),   # Input: state + map
+            nn.Linear(64, 64),   # Input: map with the state encoded
             nn.ReLU(),
             nn.Linear(64, 64),
             nn.ReLU(),
@@ -50,8 +50,18 @@ class Deep_Q_learningAgent(nn.Module):
     def forward(self,x):
         return self.network(x)
     
-    def choose_action(self,state):
-        pass
+    def choose_action(self,env):
+        x = np.random.choice([0, 1], p=[self.epsilon, 1-self.epsilon])
+        if x ==0:
+        # first option (random action)
+            action = np.random.randint(0,4)
+        # second option (take the highest q value of the neural network)
+        else:
+            encoded_map = self.encoding_input(env)
+            q_value_actions = self.forward(encoded_map)
+            action = np.argmax(q_value_actions)
+        return action
+        
 
     def train_step(self, state, action, reward, next_state, done):
         pass
@@ -68,6 +78,7 @@ class Deep_Q_learningAgent(nn.Module):
                     self.encoded_input.append([0,0,1,0]) 
                 else: 
                     self.encoded_input.append([0,0,0,1])
-        self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32)
+        self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32).flatten()
         print(self.encoded_input)
+        return self.encoded_input
 
