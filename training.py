@@ -4,7 +4,7 @@ from gridworld import GridWorld
 
 env = GridWorld(True)
 deep_agent = Deep_Q_learningAgent()
-deep_agent.encoding_input(env)
+print(np.size(deep_agent.encoding_input(env)))
 print(deep_agent)
 # agent = Q_learningAgent()
 # max_episodes = 100000

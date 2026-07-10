@@ -47,8 +47,8 @@ class Deep_Q_learningAgent(nn.Module):
         self.optimizer = optim.Adam(self.network.parameters(),lr=self.learning_rate)
         self.criterion = nn.MSELoss()
         
-    def forward(self,x):
-        return self.network(x)
+    # def forward(self,x):
+    #     return self.network(x)
     
     def choose_action(self,env):
         x = np.random.choice([0, 1], p=[self.epsilon, 1-self.epsilon])
@@ -58,12 +58,13 @@ class Deep_Q_learningAgent(nn.Module):
         # second option (take the highest q value of the neural network)
         else:
             encoded_map = self.encoding_input(env)
-            q_value_actions = self.forward(encoded_map)
+            q_value_actions = self.network(encoded_map)
             action = np.argmax(q_value_actions)
         return action
         
 
-    def train_step(self, state, action, reward, next_state, done):
+    def update_deep_q_network(self, env):
+        
         pass
 
     def encoding_input(self,env):
@@ -78,6 +79,7 @@ class Deep_Q_learningAgent(nn.Module):
                     self.encoded_input.append([0,0,1,0]) 
                 else: 
                     self.encoded_input.append([0,0,0,1])
+
         self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32).flatten()
         print(self.encoded_input)
         return self.encoded_input
