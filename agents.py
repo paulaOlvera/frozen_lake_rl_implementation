@@ -56,5 +56,17 @@ class Deep_Q_learningAgent(nn.Module):
     def train_step(self, state, action, reward, next_state, done):
         pass
 
-    def encoding_grid(self):
-        pass
+    def encoding_input(self,env):
+        self.encoded_input = []
+        state = env.get_state()
+        self.encoded_input.append(state)
+        for row in len(env.grid):
+            for col in len(env.grid[0]):
+                if env.grid[row][col]=='P':
+                    self.encoded_input.append([1,0,0,0])
+                elif env.grid[row][col]==' ':
+                    self.encoded_input.append([0,1,0,0])
+                elif env.grid[row][col]=='H':
+                    self.encoded_input.append([0,0,1,0]) 
+                else: 
+                    self.encoded_input.append([0,0,0,1])
