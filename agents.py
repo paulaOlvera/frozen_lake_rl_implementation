@@ -36,7 +36,7 @@ class Deep_Q_learningAgent(nn.Module):
         self.epsilon = 1
         self.learning_rate = 0.001
 
-        self.network == nn.Sequential(
+        self.network = nn.Sequential(
             nn.Linear(66, 64),   # Input: state + map
             nn.ReLU(),
             nn.Linear(64, 64),
@@ -44,8 +44,8 @@ class Deep_Q_learningAgent(nn.Module):
             nn.Linear(64, 4)     # Output: the four possible actions: up, down, left, right
 
         )
-        self.optimizer = optim.Adam(self.model.parameters(),lr=self.learning_rate)
-        self.criterion == nn.MSELoss()
+        self.optimizer = optim.Adam(self.network.parameters(),lr=self.learning_rate)
+        self.criterion = nn.MSELoss()
         
     def forward(self,x):
         return self.network(x)
@@ -58,10 +58,8 @@ class Deep_Q_learningAgent(nn.Module):
 
     def encoding_input(self,env):
         self.encoded_input = []
-        state = env.get_state()
-        self.encoded_input.append(state)
-        for row in len(env.grid):
-            for col in len(env.grid[0]):
+        for row in range(len(env.grid)):
+            for col in range(len(env.grid[0])):
                 if env.grid[row][col]=='P':
                     self.encoded_input.append([1,0,0,0])
                 elif env.grid[row][col]==' ':
@@ -70,3 +68,6 @@ class Deep_Q_learningAgent(nn.Module):
                     self.encoded_input.append([0,0,1,0]) 
                 else: 
                     self.encoded_input.append([0,0,0,1])
+        self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32)
+        print(self.encoded_input)
+
