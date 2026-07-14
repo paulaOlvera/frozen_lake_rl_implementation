@@ -30,6 +30,7 @@ class Q_learningAgent:
         # return self.q_table
 
 class Deep_Q_learningAgent(nn.Module):
+    # this deep q learning agent will have replay memory and a target and current q value network.
     def __init__(self):
         super().__init__()
         self.gamma = 0.99
@@ -57,7 +58,7 @@ class Deep_Q_learningAgent(nn.Module):
             action = np.random.randint(0,4)
         # second option (take the highest q value of the neural network)
         else:
-            encoded_map = self.encoding_input(env)
+            encoded_map = self.encoding_input(env.grid)
             q_value_actions = self.network(encoded_map)
             action = np.argmax(q_value_actions)
         return action
@@ -68,15 +69,15 @@ class Deep_Q_learningAgent(nn.Module):
 
         pass
 
-    def encoding_input(self,env):
+    def encoding_input(self,grid):
         self.encoded_input = []
-        for row in range(len(env.grid)):
-            for col in range(len(env.grid[0])):
-                if env.grid[row][col]=='P':
+        for row in range(len(grid)):
+            for col in range(len(grid[0])):
+                if grid[row][col]=='P':
                     self.encoded_input.append([1,0,0,0])
-                elif env.grid[row][col]==' ':
+                elif grid[row][col]==' ':
                     self.encoded_input.append([0,1,0,0])
-                elif env.grid[row][col]=='H':
+                elif grid[row][col]=='H':
                     self.encoded_input.append([0,0,1,0]) 
                 else: 
                     self.encoded_input.append([0,0,0,1])

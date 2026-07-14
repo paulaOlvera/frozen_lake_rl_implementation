@@ -18,9 +18,9 @@ class GridWorld:
                     col = np.random.randint(0,4)
                     if self.grid[row][col]==' ':
                         count+=1
-                        print(f"row {row} and col {col}")
+                        # print(f"row {row} and col {col}")
                         self.grid[row][col]='H'
-                self.render()
+                # self.render()
                 if self.possible_tiles_hole():
                     break
                 else:
