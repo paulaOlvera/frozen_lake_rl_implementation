@@ -60,7 +60,7 @@ class Deep_Q_learningAgent(nn.Module):
         else:
             encoded_map = self.encoding_input(env.grid)
             q_value_actions = self.network(encoded_map)
-            action = np.argmax(q_value_actions)
+            action = torch.argmax(q_value_actions) # if this is a tensor i cannot do that
         return action
         
 
@@ -83,6 +83,6 @@ class Deep_Q_learningAgent(nn.Module):
                     self.encoded_input.append([0,0,0,1])
 
         self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32).flatten()
-        print(self.encoded_input)
+        # print(self.encoded_input)
         return self.encoded_input
 
