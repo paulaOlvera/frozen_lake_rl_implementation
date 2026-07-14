@@ -12,7 +12,7 @@ q_target_network = Deep_Q_learningAgent() # initalize target network
 q_network.network.to(device)
 q_target_network.network.to(device)
 
-max_episodes = 1000
+max_episodes = 10000
 episode = 0
 replay_memory = []
 memory_capacity = 100
@@ -67,4 +67,4 @@ for episode in range(max_episodes):
         if count == 2000:
             q_target_network.network.load_state_dict(q_network.network.state_dict()) # give the weights of the current network to the target network.
             count = 0
-torch.save(q_network.network.state_dict(), "dqn_model.pth")
+torch.save(q_network.network.state_dict(), "dqn_model1.pth")
