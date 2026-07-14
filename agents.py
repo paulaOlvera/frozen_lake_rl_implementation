@@ -65,6 +65,7 @@ class Deep_Q_learningAgent(nn.Module):
 
     def update_deep_q_network(self, env):
         
+
         pass
 
     def encoding_input(self,env):
