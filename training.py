@@ -4,8 +4,6 @@ from gridworld import GridWorld
 import random
 import torch 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
 env = GridWorld(True)
 q_network = Deep_Q_learningAgent() # initialize network with random weights
 q_target_network = Deep_Q_learningAgent() # initalize target network
@@ -22,6 +20,8 @@ for episode in range(max_episodes):
     env.reset()
     encoded_grid_actual_step = q_network.encoding_input(env.grid)
     done_sampling = False
+    episode += 1
+    print("The episode is",episode)
     while done_sampling is not True:
         action = q_network.choose_action(env)
         next_step, reward, done_sampling = env.step(action)
@@ -49,7 +49,7 @@ for episode in range(max_episodes):
                 q_current_action_values = q_network.network(encoded_grid_actual_steps[j])
                 loss = q_network.criterion(q_target_value,q_current_action_values[actions[j]])
                 losses.append(loss)
-
+                
             loss = torch.stack(losses).mean()
             q_network.optimizer.zero_grad()
             loss.backward()
@@ -60,7 +60,7 @@ for episode in range(max_episodes):
         q_network.epsilon = max(0.01, np.exp(-0.001 * episode))
         print(q_network.epsilon)
         if count == 2000:
-            q_target_network.network.load_state_dict(q_network.network.state_dict()) 
+            q_target_network.network.load_state_dict(q_network.network.state_dict()) # give the weights of the current network to the target network.
             count = 0
 
 
