@@ -1,21 +1,21 @@
-from agents import Q_learningAgent
+from agents import Deep_Q_learningAgent
 from gridworld import GridWorld
-import numpy as np
-
-agent = Q_learningAgent()
+import torch 
+deep_network= Deep_Q_learningAgent()
 env = GridWorld(False)
-agent.q_table = np.load("q_table.npy")
+deep_network.network.load_state_dict(torch.load("dqn_model.pth"))
+
 if __name__ == '__main__': 
-    done = False
-    
     print("**************Game starts **************************")
-    env.render()
-    while not done: 
-        state = env.get_state()
-        action = np.argmax(agent.q_table[state[0],state[1]])
+    done = False
+    env.reset()
+
+    while not done:
+        
+        deep_network.epsilon = 0
+        action = deep_network.choose_action(env)
         next_state, reward, done = env.step(action)
         print()
         env.render()
-
         if done:
             print("**************Game over **************************")

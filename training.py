@@ -24,4 +24,4 @@ if __name__ == '__main__':
                 env.reset()
                 episode +=1
                 break
-    np.save("frozen_lake_rl_implementation/q_table.npy", agent.q_table)
+    np.save("q_table.npy", agent.q_table)
