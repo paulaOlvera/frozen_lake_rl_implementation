@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
+device = torch.device("cuda")
 class Q_learningAgent:
     def __init__(self):
 
@@ -47,7 +47,6 @@ class Deep_Q_learningAgent(nn.Module):
         )
         self.optimizer = optim.Adam(self.network.parameters(),lr=self.learning_rate)
         self.criterion = nn.MSELoss()
-        
     # def forward(self,x):
     #     return self.network(x)
     
@@ -82,7 +81,7 @@ class Deep_Q_learningAgent(nn.Module):
                 else: 
                     self.encoded_input.append([0,0,0,1])
 
-        self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32).flatten()
+        self.encoded_input = torch.tensor(self.encoded_input,dtype=torch.float32,device=device).flatten()
         # print(self.encoded_input)
         return self.encoded_input
 

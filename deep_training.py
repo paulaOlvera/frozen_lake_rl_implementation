@@ -4,9 +4,13 @@ from gridworld import GridWorld
 import random
 import torch 
 
-env = GridWorld(False)
+device = torch.device("cuda")
+env = GridWorld(True)
 q_network = Deep_Q_learningAgent() # initialize network with random weights
 q_target_network = Deep_Q_learningAgent() # initalize target network
+
+q_network.network.to(device)
+q_target_network.network.to(device)
 
 max_episodes = 1000
 episode = 0
@@ -18,7 +22,7 @@ count = 0
 for episode in range(max_episodes):
     # sampling 
     env.reset()
-    encoded_grid_actual_step = q_network.encoding_input(env.grid)
+    encoded_grid_actual_step = q_network.encoding_input(env.grid).to(device)
     done_sampling = False
     episode += 1
     print("The episode is",episode)
@@ -26,7 +30,8 @@ for episode in range(max_episodes):
         action = q_network.choose_action(env)
         next_step, reward, done_sampling = env.step(action)
         grid_next_step = env.grid
-        encoded_grid_next_step = q_network.encoding_input(grid_next_step)
+        encoded_grid_next_step = q_network.encoding_input(grid_next_step).to(device)
+        
         replay_memory.append([encoded_grid_actual_step,action,reward,encoded_grid_next_step,done_sampling])
         if len(replay_memory) > memory_capacity:
             replay_memory.pop(0)
@@ -44,7 +49,7 @@ for episode in range(max_episodes):
                 else: 
                     best_target_action= max(q_target_network.network(encoded_grid_next_steps[j]))
                     q_target_value = rewards[j] + q_target_network.gamma * best_target_action
-                q_target_value = torch.tensor(q_target_value,dtype=torch.float32)
+                q_target_value = torch.tensor(q_target_value,dtype=torch.float32,device=device)
                 # q current network value
                 q_current_action_values = q_network.network(encoded_grid_actual_steps[j])
                 loss = q_network.criterion(q_target_value,q_current_action_values[actions[j]])

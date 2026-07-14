@@ -2,7 +2,7 @@ from agents import Deep_Q_learningAgent
 from gridworld import GridWorld
 import torch 
 deep_network= Deep_Q_learningAgent()
-env = GridWorld(False)
+env = GridWorld(True)
 deep_network.network.load_state_dict(torch.load("dqn_model.pth"))
 
 if __name__ == '__main__': 
